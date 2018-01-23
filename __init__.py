@@ -21,18 +21,3 @@ __header__ = """
             `++:.                           `-/+/
             .`                                 `/
 """
-
-
-def gen_files(seed, size=1000):
-    """TODO: Docstring for gen_files.
-
-    :seed: TODO
-    :size: TODO
-    :returns: TODO
-
-    """
-    pass
-
-
-if __name__ == "__main__":
-    pass
