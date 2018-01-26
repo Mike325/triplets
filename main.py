@@ -3,9 +3,9 @@
 from files.genfiles import checkFiles
 from files.genfiles import getArray
 from algorithm.triplet import TripletMaker
-from logger.logger import status_msg
-# from logger.logger import error_msg
-# from logger.logger import verbose_msg
+from logger.messages import status
+from logger.messages import error
+from logger.messages import verbose
 import argparse
 import time
 
@@ -87,6 +87,39 @@ def __parse_arguments():
     return cli_args
 
 
+def _multi_length(override=False, output="triplets.log"):
+    """TODO: Docstring for _multi_length.
+    :returns: TODO
+
+    """
+    checkFiles(override)
+
+    for item in [1000, 2000, 5000, 10000, 100000, 1000000]:
+        start_file = time.time()
+        array = getArray(item)
+        maker = TripletMaker(array, output)
+        maker.start()
+        status("Time for file {0}".format(time.time() - start_file))
+
+
+def _same_size_length(override=False, output="triplets.log"):
+    """TODO: Docstring for _same_size_length.
+
+    :override: TODO
+    :output: TODO
+    :returns: TODO
+
+    """
+    checkFiles(override)
+
+    for item in range(0, 100):
+        start_file = time.time()
+        array = getArray(item)
+        maker = TripletMaker(array, output)
+        maker.start()
+        status("Time for file {0}".format(time.time() - start_file))
+
+
 def main():
     """Main function
     """
@@ -96,21 +129,23 @@ def main():
     cli_args = __parse_arguments()
 
     if cli_args.version:
-        status_msg("Current version {0}".format(__version__))
+        status("Current version {0}".format(__version__))
         return 0
 
     debug_mode = cli_args.verbose
 
-    start_time = time.time()
-    checkFiles(cli_args.override)
+    if cli_args.test == "100" or cli_args.test == "all"
+        _multi_length(cli_args.override, cli_args.output)
 
-    for item in [1000, 2000, 5000, 10000, 100000, 1000000]:
-        array = getArray(item)
-        maker = TripletMaker(array, cli_args.output)
-        maker.start()
+    if cli_args.test == "1M" or cli_args.test == "all"
+        _same_size_length(cli_args.override, cli_args.output)
+
+    start_time = time.time()
+
+
 
     final_time = str(time.time() - start_time)
-    status_msg("Final time {0}".format(final_time))
+    status("Final time {0}".format(final_time))
 
 
 if __name__ == "__main__":

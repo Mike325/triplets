@@ -22,10 +22,10 @@ __header__ = """
             .`                                 `/
 """
 
-# debug_mode = False
+debug_mode = True
 
 
-def status_msg(message):
+def status(message):
     """Print status message
 
     :message: TODO
@@ -35,8 +35,8 @@ def status_msg(message):
     print("[*]  {0}".format(message))
 
 
-def verbose_msg(message):
-    """TODO: Docstring for verbose_msg.
+def verbose(message):
+    """TODO: Docstring for verbose.
 
     :message: TODO
     :returns: TODO
@@ -47,7 +47,7 @@ def verbose_msg(message):
         print("[!]  ---- Debug: {0}".format(message))
 
 
-def warning_msg(message):
+def warning(message):
     """TODO: Docstring for status_message.
 
     :message: TODO
@@ -57,7 +57,7 @@ def warning_msg(message):
     print("[!]  ---- Warning: {0}".format(message))
 
 
-def error_msg(message):
+def error(message):
     """TODO: Docstring for status_message.
 
     :message: TODO

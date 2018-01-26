@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 from random import randint
-from logger.logger import status_msg
-from logger.logger import error_msg
-from logger.logger import verbose_msg
+from logger.messages import status
+from logger.messages import error
+from logger.messages import verbose
 import os
 import time
 
@@ -58,10 +58,10 @@ def genFiles(size=1000, seed=None):
         filename = "{0}nums.txt".format(size)
 
     if seed is not None:
-        verbose_msg("Using seed {0}".format(seed))
+        verbose("Using seed {0}".format(seed))
 
     with open(filename, "w") as data:
-        verbose_msg("Creating {0}".format(filename))
+        verbose("Creating {0}".format(filename))
         for x in range(size):
             number = str(randint(-100, 100))
             data.write(number + ',')
@@ -106,9 +106,9 @@ def getArray(size=None):
     else:
         filename = "{0}nums.txt".format(size)
 
-    array = []
+    array = None
     with open(filename, "r") as data:
-        verbose_msg("Reading {0}".format(filename))
+        verbose("Reading {0}".format(filename))
         array = data.read()
         array = array.split(",")
 
