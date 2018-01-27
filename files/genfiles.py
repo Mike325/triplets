@@ -123,7 +123,7 @@ def get_array(filename="", size=None):
 
     array = None
     with open(filename, "r") as data:
-        verbose("Reading {0}".format(filename))
+        status("Searching in {0}".format(filename))
         array = data.read()
         array = array.split(",")
 
