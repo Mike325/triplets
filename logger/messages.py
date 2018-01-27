@@ -39,7 +39,10 @@ def status(message):
         if quiet is False:
             print("[*]  {0}".format(message))
         if logger:
-            messages.write("[*]  {0}\n".format(message))
+            try:
+                messages.write("[*]  {0}\n".format(message))
+            except IOError as e:
+                error("We couldn't write the logger, check your SO permissions")
 
 
 def verbose(message):
@@ -56,7 +59,10 @@ def verbose(message):
             if quiet is False:
                 print("[$]  ---- Debug: {0}".format(message))
             if logger:
-                messages.write("[$]  ---- Debug: {0}\n".format(message))
+                try:
+                    messages.write("[$]  ---- Debug: {0}\n".format(message))
+                except Exception as e:
+                    error("We couldn't write the logger, check your SO permissions")
 
 
 def warning(message):
@@ -71,7 +77,10 @@ def warning(message):
         if quiet is False:
             print("[!]  ---- Warning: {0}".format(message))
         if logger:
-            messages.write("[!]  ---- Warning: {0}\n".format(message))
+            try:
+                messages.write("[!]  ---- Warning: {0}\n".format(message))
+            except Exception as e:
+                error("We couldn't write the logger, check your SO permissions")
 
 
 def error(message):
@@ -86,7 +95,10 @@ def error(message):
         if quiet is False:
             print("[X]  ---- Error: {0}".format(message))
         if logger:
-            messages.write("[X]  ---- Error: {0}".format(message))
+            try:
+                messages.write("[X]  ---- Error: {0}".format(message))
+            except Exception as e:
+                error("We couldn't write the logger, check your SO permissions")
 
 
 if __name__ == "__main__":
@@ -94,4 +106,7 @@ if __name__ == "__main__":
 else:
     # We clean the logger
     with open("messages.log", "w") as messages:
-        messages.write("")
+        try:
+            messages.write("")
+        except Exception as e:
+            error("We couldn't write the logger, check your SO permissions")
