@@ -30,18 +30,48 @@ __header__ = """
 """
 
 
-""" Escriba un programa que genere un millon de numeros enteros aleatorios
-entre -100 y 100.
-1.- Escriba los primero 1,000 en un archivo 1Knums.txt
-2.- Escriba los primero 2,000 en un archivo 2Knums.txt
-3.- Escriba los primero 5,000 en un archivo 5Knums.txt
-4.- Escriba los primero 10,000 en un archivo 10Knums.txt
-5.- Escriba los primero 100,000 en un archivo 100Knums.txt
-6.- Escriba el millon de numeros en un archivo 1Mnums.txt """
+def get_filename(size):
+    """TODO: Docstring for define_name.
+
+    :size: TODO
+    :returns: TODO
+
+    """
+    filename = ""
+    if size >= 1000000:
+        filename = "{0}Mnums".format(size // 1000000)
+    elif size >= 1000:
+        filename = "{0}Knums".format(size // 1000)
+    else:
+        filename = "{0}nums".format(size)
+
+    return filename
 
 
-def genFiles(size=1000, seed=None):
-    """TODO: Docstring for genfiles.
+def log_triplets(size, triplets, filename=""):
+    """TODO: Docstring for log_triplets.
+
+    :output: TODO
+    :size: TODO
+    :triplets: TODO
+    :returns: TODO
+
+    """
+    if filename == "":
+        filename = get_filename(size) + ".log"
+
+    with open(filename, "w") as log:
+        log.write("Triplet\t\tNumber of times found\n\n")
+        total = 0
+        for triplet in triplets:
+            total += triplet.amount
+            log.write("{0}\n".format(triplet))
+
+        log.write("\nTotal of triplets {0}\n".format(total))
+
+
+def gen_files(size=1000, filename="", seed=None):
+    """TODO: Docstring for gen_files.
 
     :size: TODO
     :returns: TODO
@@ -49,13 +79,8 @@ def genFiles(size=1000, seed=None):
     """
     # start_time = time.time()
 
-    filename = ""
-    if size >= 1000000:
-        filename = "{0}Mnums.txt".format(size // 1000000)
-    elif size >= 1000:
-        filename = "{0}Knums.txt".format(size // 1000)
-    else:
-        filename = "{0}nums.txt".format(size)
+    if filename == "":
+        filename = get_filename(size) + ".txt"
 
     if seed is not None:
         verbose("Using seed {0}".format(seed))
@@ -66,45 +91,41 @@ def genFiles(size=1000, seed=None):
             number = str(randint(-100, 100))
             data.write(number + ',')
 
-    # print(x)
-    # print("EXE TIME: " + str(time.time() - start_time))
 
-
-def checkFiles(override=False):
-    """TODO: Docstring for checkFiles.
+def check_files(size=1000, filename="", override=False):
+    """TODO: Docstring for check_files.
 
     :size: TODO
     :returns: TODO
 
     """
-    for item in [1000, 2000, 5000, 10000, 100000, 1000000]:
 
-        filename = ""
-        if item >= 1000000:
-            filename = "{0}Mnums.txt".format(item // 1000000)
-        elif item >= 1000:
-            filename = "{0}Knums.txt".format(item // 1000)
-        else:
-            filename = "{0}nums.txt".format(item)
+    if filename == "":
+        filename = get_filename(size) + ".txt"
 
-        if not os.path.isfile(filename) or override is True:
-            genFiles(item)
+    if not os.path.isfile(filename) or override is True:
+        gen_files(size, filename)
+    elif os.path.isfile(filename) and override is False:
+        prefix = 1
+        while True:
+            tmp_filename = "{0}_{1}".format(prefix, filename)
+            if not os.path.isfile(tmp_filename):
+                gen_files(size, tmp_filename)
+                break
+            prefix += 1
+        pass
 
 
-def getArray(size=None):
-    """TODO: Docstring for getArray.
+def get_array(filename="", size=None):
+    """TODO: Docstring for get_array.
 
     :size: TODO
     :returns: TODO
 
     """
-    filename = ""
-    if size >= 1000000:
-        filename = "{0}Mnums.txt".format(size // 1000000)
-    elif size >= 1000:
-        filename = "{0}Knums.txt".format(size // 1000)
-    else:
-        filename = "{0}nums.txt".format(size)
+
+    if filename == "":
+        filename = get_filename(size) + ".txt"
 
     array = None
     with open(filename, "r") as data:
@@ -116,4 +137,4 @@ def getArray(size=None):
 
 
 if __name__ == "__main__":
-    checkFiles()
+    check_files()

@@ -22,7 +22,7 @@ __header__ = """
             .`                                 `/
 """
 
-debug_mode = True
+debug_mode = False
 
 
 def status(message):
@@ -32,7 +32,9 @@ def status(message):
     :returns: TODO
 
     """
-    print("[*]  {0}".format(message))
+    with open("messages.log", "a") as messages:
+        print("[*]  {0}".format(message))
+        messages.write("[*]  {0}\n".format(message))
 
 
 def verbose(message):
@@ -44,7 +46,9 @@ def verbose(message):
     """
     global debug_mode
     if debug_mode is True:
-        print("[!]  ---- Debug: {0}".format(message))
+        with open("messages.log", "a") as messages:
+            print("[!]  ---- Debug: {0}".format(message))
+            messages.write("[!]  ---- Debug: {0}\n".format(message))
 
 
 def warning(message):
@@ -54,7 +58,9 @@ def warning(message):
     :returns: TODO
 
     """
-    print("[!]  ---- Warning: {0}".format(message))
+    with open("messages.log", "a") as messages:
+        print("[!]  ---- Warning: {0}".format(message))
+        messages.write("[!]  ---- Warning: {0}\n".format(message))
 
 
 def error(message):
@@ -64,7 +70,9 @@ def error(message):
     :returns: TODO
 
     """
-    print("[X]  ---- Error: {0}".format(message))
+    with open("messages.log", "a") as messages:
+        print("[X]  ---- Error: {0}".format(message))
+        messages.write("[X]  ---- Error: {0}".format(message))
 
 
 if __name__ == "__main__":

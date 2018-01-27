@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 
-from files.genfiles import checkFiles
-from files.genfiles import getArray
+from files.genfiles import check_files
+from files.genfiles import get_array
+from files.genfiles import log_triplets
+from files.genfiles import get_filename
 from algorithm.triplet import TripletMaker
 from logger.messages import status
 from logger.messages import error
 from logger.messages import verbose
+from logger import messages
 import argparse
 import time
 
@@ -32,7 +35,6 @@ __header__ = """
 """
 
 __version__ = "0.1.0"
-debug_mode = False
 start_time = None
 
 
@@ -87,19 +89,18 @@ def __parse_arguments():
     return cli_args
 
 
-def _multi_length(override=False, output="triplets.log"):
+def _multi_length(override=False):
     """TODO: Docstring for _multi_length.
     :returns: TODO
 
     """
-    checkFiles(override)
 
     for item in [1000, 2000, 5000, 10000, 100000, 1000000]:
-        start_file = time.time()
-        array = getArray(item)
-        maker = TripletMaker(array, output)
+        check_files(size=item)
+        array = get_array(size=item)
+        maker = TripletMaker(array)
         maker.start()
-        status("Time for file {0}".format(time.time() - start_file))
+        log_triplets(maker.size, maker.triplets)
 
 
 def _same_size_length(override=False, output="triplets.log"):
@@ -110,14 +111,16 @@ def _same_size_length(override=False, output="triplets.log"):
     :returns: TODO
 
     """
-    checkFiles(override)
 
     for item in range(0, 100):
-        start_file = time.time()
-        array = getArray(item)
+        filename = get_filename(100000)
+        check_files(size=100000, filename="{0}_{1}.txt".format(item, filename))
+        array = get_array(filename="{0}_{1}.txt".format(item, filename))
         maker = TripletMaker(array, output)
         maker.start()
-        status("Time for file {0}".format(time.time() - start_file))
+        log_triplets(size=maker.size,
+                     triplets=maker.triplets,
+                     filename="{0}_{1}.log".format(item, filename))
 
 
 def main():
@@ -132,17 +135,15 @@ def main():
         status("Current version {0}".format(__version__))
         return 0
 
-    debug_mode = cli_args.verbose
-
-    if cli_args.test == "100" or cli_args.test == "all"
-        _multi_length(cli_args.override, cli_args.output)
-
-    if cli_args.test == "1M" or cli_args.test == "all"
-        _same_size_length(cli_args.override, cli_args.output)
+    messages.debug_mode = cli_args.verbose
 
     start_time = time.time()
 
+    if cli_args.test == "1M" or cli_args.test == "all":
+        _multi_length(cli_args.override)
 
+    if cli_args.test == "100" or cli_args.test == "all":
+        _same_size_length(cli_args.override, cli_args.output)
 
     final_time = str(time.time() - start_time)
     status("Final time {0}".format(final_time))

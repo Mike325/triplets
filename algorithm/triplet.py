@@ -4,6 +4,7 @@ from logger.messages import status
 from logger.messages import error
 from logger.messages import verbose
 from logger.messages import warning
+import time
 
 __header__ = """
                               -`
@@ -113,13 +114,14 @@ class TripletMaker(object):
                 warning("Not a valid item {0}".format(item))
                 continue
 
-        total = 0
+        self.size = 0
         for key in range(-100, 101):
             value = self.tree[key]
-            total += value
+            self.size += value
             verbose("Key: {0};      Value: {1}".format(key, value))
-        verbose("Total {0}".format(total))
+        verbose("size {0}".format(self.size))
 
+        self.time = None
         self.done = False
         self.output = output
         self.triplets = []
@@ -203,6 +205,7 @@ class TripletMaker(object):
                         updated dictionary, And empty vector is return if no
                         triplet was found
         """
+        start_time = time.time()
         while not self.done:
             self.done = True
             for item in range(-100, 101):
@@ -217,6 +220,12 @@ class TripletMaker(object):
                             verbose("No triplet found for {0}".format(item))
                 else:
                     verbose("Skipping {0}: {1}".format(item, self.tree[item]))
+
+        end_time = time.time()
+
+        self.time = end_time - start_time
+
+        status("End time of {0}".format(self.time))
 
         total = 0
         for key in range(-100, 101):
