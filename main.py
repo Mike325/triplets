@@ -59,14 +59,6 @@ def __parse_arguments():
                         metavar='TEST',
                         dest="test",
                         type=str)
-    parser.add_argument("-o",
-                        "--output",
-                        help="Output file with the Triplets",
-                        required=False,
-                        metavar='LOG',
-                        default="triplets.log",
-                        dest="output",
-                        type=str)
     parser.add_argument("--override",
                         help="Force file creation",
                         required=False,
@@ -77,6 +69,18 @@ def __parse_arguments():
                         help="Enable debug messages",
                         required=False,
                         dest="verbose",
+                        action="store_true")
+    parser.add_argument("-l",
+                        "--logger",
+                        help="Enable logger",
+                        required=False,
+                        dest="logger",
+                        action="store_true")
+    parser.add_argument("-q",
+                        "--quiet",
+                        help="Silence all stout output",
+                        required=False,
+                        dest="quiet",
                         action="store_true")
     parser.add_argument("--version",
                         help="Shows the version",
@@ -96,14 +100,14 @@ def _multi_length(override=False):
     """
 
     for item in [1000, 2000, 5000, 10000, 100000, 1000000]:
-        check_files(size=item)
+        check_files(size=item, override=override)
         array = get_array(size=item)
         maker = TripletMaker(array)
         maker.start()
-        log_triplets(maker.size, maker.triplets)
+        log_triplets(maker.size, maker.triplets, maker.time)
 
 
-def _same_size_length(override=False, output="triplets.log"):
+def _same_size_length(override=False):
     """TODO: Docstring for _same_size_length.
 
     :override: TODO
@@ -116,10 +120,11 @@ def _same_size_length(override=False, output="triplets.log"):
         filename = get_filename(100000)
         check_files(size=100000, filename="{0}_{1}.txt".format(item, filename))
         array = get_array(filename="{0}_{1}.txt".format(item, filename))
-        maker = TripletMaker(array, output)
+        maker = TripletMaker(array)
         maker.start()
         log_triplets(size=maker.size,
                      triplets=maker.triplets,
+                     searchtime=maker.time,
                      filename="{0}_{1}.log".format(item, filename))
 
 
@@ -136,6 +141,8 @@ def main():
         return 0
 
     messages.debug_mode = cli_args.verbose
+    messages.quiet = cli_args.quiet
+    messages.logger = cli_args.logger
 
     start_time = time.time()
 
@@ -143,7 +150,7 @@ def main():
         _multi_length(cli_args.override)
 
     if cli_args.test == "100" or cli_args.test == "all":
-        _same_size_length(cli_args.override, cli_args.output)
+        _same_size_length(cli_args.override)
 
     final_time = str(time.time() - start_time)
     status("Final time {0}".format(final_time))

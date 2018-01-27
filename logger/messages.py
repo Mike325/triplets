@@ -22,7 +22,9 @@ __header__ = """
             .`                                 `/
 """
 
+quiet = False
 debug_mode = False
+logger = False
 
 
 def status(message):
@@ -32,9 +34,12 @@ def status(message):
     :returns: TODO
 
     """
+    global quiet
     with open("messages.log", "a") as messages:
-        print("[*]  {0}".format(message))
-        messages.write("[*]  {0}\n".format(message))
+        if quiet is False:
+            print("[*]  {0}".format(message))
+        if logger:
+            messages.write("[*]  {0}\n".format(message))
 
 
 def verbose(message):
@@ -45,10 +50,13 @@ def verbose(message):
 
     """
     global debug_mode
+    global quiet
     if debug_mode is True:
         with open("messages.log", "a") as messages:
-            print("[!]  ---- Debug: {0}".format(message))
-            messages.write("[!]  ---- Debug: {0}\n".format(message))
+            if quiet is False:
+                print("[$]  ---- Debug: {0}".format(message))
+            if logger:
+                messages.write("[$]  ---- Debug: {0}\n".format(message))
 
 
 def warning(message):
@@ -58,9 +66,12 @@ def warning(message):
     :returns: TODO
 
     """
+    global quiet
     with open("messages.log", "a") as messages:
-        print("[!]  ---- Warning: {0}".format(message))
-        messages.write("[!]  ---- Warning: {0}\n".format(message))
+        if quiet is False:
+            print("[!]  ---- Warning: {0}".format(message))
+        if logger:
+            messages.write("[!]  ---- Warning: {0}\n".format(message))
 
 
 def error(message):
@@ -70,10 +81,17 @@ def error(message):
     :returns: TODO
 
     """
+    global quiet
     with open("messages.log", "a") as messages:
-        print("[X]  ---- Error: {0}".format(message))
-        messages.write("[X]  ---- Error: {0}".format(message))
+        if quiet is False:
+            print("[X]  ---- Error: {0}".format(message))
+        if logger:
+            messages.write("[X]  ---- Error: {0}".format(message))
 
 
 if __name__ == "__main__":
     raise Exception("This script is intended to be used as a module")
+else:
+    # We clean the logger
+    with open("messages.log", "w") as messages:
+        messages.write("")

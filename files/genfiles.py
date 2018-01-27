@@ -48,7 +48,7 @@ def get_filename(size):
     return filename
 
 
-def log_triplets(size, triplets, filename=""):
+def log_triplets(size, triplets, searchtime, filename=""):
     """TODO: Docstring for log_triplets.
 
     :output: TODO
@@ -68,6 +68,7 @@ def log_triplets(size, triplets, filename=""):
             log.write("{0}\n".format(triplet))
 
         log.write("\nTotal of triplets {0}\n".format(total))
+        log.write("Time to find the triplets {0}".format(searchtime))
 
 
 def gen_files(size=1000, filename="", seed=None):
@@ -104,16 +105,9 @@ def check_files(size=1000, filename="", override=False):
         filename = get_filename(size) + ".txt"
 
     if not os.path.isfile(filename) or override is True:
+        if os.path.isfile(filename) and override is True:
+            verbose("Removing {0}".format(filename))
         gen_files(size, filename)
-    elif os.path.isfile(filename) and override is False:
-        prefix = 1
-        while True:
-            tmp_filename = "{0}_{1}".format(prefix, filename)
-            if not os.path.isfile(tmp_filename):
-                gen_files(size, tmp_filename)
-                break
-            prefix += 1
-        pass
 
 
 def get_array(filename="", size=None):
