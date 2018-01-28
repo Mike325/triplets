@@ -67,7 +67,8 @@ def log_triplets(size, triplets, searchtime, filename=""):
             total += triplet.amount
             log.write("{0}\n".format(triplet))
 
-        log.write("\nTotal of triplets {0}\n".format(total))
+        log.write("\nTotal of triplets\t\t{0}\n".format(total))
+        log.write("Different triplets:\t\t{0}\n".format(len(triplets)))
         log.write("Time to find the triplets {0}".format(searchtime))
 
 

@@ -72,7 +72,7 @@ class Triplet(object):
         :returns: TODO
 
         """
-        return "({0}, {1}, {2}):\t\t\t{3}".format(self.first,
+        return "({0}, {1}, {2}):\t\t{3}".format(self.first,
                                                   self.second,
                                                   self.third,
                                                   self.amount)
