@@ -231,7 +231,7 @@ class TripletMaker(object):
 
         """
         triplet = self._remove_numbers(first, second, third)
-        status("Found triplet {0}".format(triplet))
+        verbose("Found triplet {0}".format(triplet))
         self.done = False
         self.triplets.append(triplet)
 
@@ -259,7 +259,7 @@ class TripletMaker(object):
 
         self.time = end_time - start_time
 
-        status("End time of {0}".format(self.time))
+        status("End time of {0}. {1} different triplets found".format(self.time, len(self.triplets)))
 
         # Save time by not doing this shit if is not debug mode
         if messages.debug_mode:
